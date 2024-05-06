@@ -1,0 +1,5 @@
+# folders to ignore
+src/test/
+
+# file extensions to ignore
+*.exe

@@ -1,27 +1,107 @@
 import argparse
 from PIL import Image
 import os
+import custom_errors as ce
+import urllib.request as request
+import io
+
+help_text = \
+"""
+All supported conversion modes:
+
+1. file -> file
+2. file -> dir *coming soon*
+3. dir -> dir *coming soon*
+4. link -> file *coming soon*
+"""
 
 parser = argparse.ArgumentParser(prog="aicc", 
                               description="All Image Conversion Command (AICC) is for converting any image format to any other image format.",
-                              epilog="Note: This command makes use of pillow module in Python.")
+                              epilog=help_text+"Note: This command makes use of pillow module in Python.")
 
-parser.add_argument("-c", "--collection", default=None, )
-parser.add_argument("file1", help="the file to convert from")
-parser.add_argument("file2", help="the file to convert to")
+parser.add_argument("from_file", type=str, help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
+parser.add_argument("to_file", type=str, help="The file or directory to convert to")
+parser.add_argument("extension", type=str, help="The extenstion to convert to")
+
+"""
+Essentially, there are three modes to the conversion depending on the input and output details entered:
+
+1. file -> file
+2. file -> dir *coming soon*
+3. dir -> dir *coming soon*
+4. link -> file *coming soon*
+
+**no** dir -> file (obviously, thats impossible)
+"""
 
 args = parser.parse_args()
 
-supported = Image.registered_extensions()
+file1 = args.from_file
+file2 = args.to_file
+file_ext = args.extension
 
-f1 = args.file1
-f2 = args.file2
+file_ext = f".{file_ext}" if not file_ext.startswith(".") else file_ext
 
-dir_mode = args.collection
+conversion_mode = 1
 
-def convert_to(from_: str, to_: str):
+if os.path.isfile(file1):
+    conversion_mode = 1
+
+else:
+    raise ce.ModeNotSupported("This mode is not supported yet! Use -h to see all supported conversion modes!")
+"""
+if file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for (useless optimisation alert!)
+    conversion_mode = 4
+
+elif os.path.isfile(file1):
+    conversion_mode = 1
+
+    if os.path.isdir(file2):
+        conversion_mode = 2
+
+elif os.path.isdir(file1) and os.path.isdir(file2):
+    conversion_mode = 3
+"""
+
+supported_ext = Image.registered_extensions()
+
+if (file_ext if file_ext.startswith(".") else ".{file_ext}").lower() not in supported_ext:
+    temp = f"{file_ext} not supported! Only supported extensions are: "
+
+    for key in supported_ext:
+        temp += f"{key} "
+
+    raise ce.UnsupportedConversion(temp)
+
+
+def split_path_to_list(path: str) -> list:
+    list_path = path.split("\\") if path.count("\\") > 0 else path.split("/")
+    
+    return list_path
+
+def merge_list_to_path(list_path: list) -> str:
+    path = ""
+
+    for name in list_path:
+        path += name + "\\"
+
+    return path
+
+def convert_to(file1: str, file2: str, ext: str) -> None:
+    img = Image.open(file1)
+    if not file2.lower().endswith(ext.lower()):
+        file2 = f"{file2}{ext}"
+    img.save(file2, ext[1:])
+
+
+if conversion_mode == 1: # file -> file
+    convert_to(file1, file2, file_ext)
+
+elif conversion_mode == 2: # file -> dir
     pass
 
-if dir_mode != None:
-    for filename in os.listdir(f1):
-        print(filename)
+elif conversion_mode == 3: # dir -> dir
+    pass
+
+elif conversion_mode == 4: # link -> file
+    pass
