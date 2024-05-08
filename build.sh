@@ -1,1 +1,1 @@
-pyinstaller --noconfirm --onedir --console --icon "./src/assets/icon.ico" --name "aicc" --splash "./src/assets/SidTheLoserLogo.png"  "./src/main.py"
+pyinstaller --noconfirm --onedir --console --icon "./src/assets/icon.ico" --name "aicc" "./src/main.py"
