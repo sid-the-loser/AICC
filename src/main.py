@@ -2,7 +2,7 @@ import argparse
 from PIL import Image
 import os
 import custom_errors as ce
-import urllib.request as request
+import requests
 import io
 
 help_text = \
@@ -12,7 +12,7 @@ All supported conversion modes:
 1. file -> file
 2. file -> dir *coming soon*
 3. dir -> dir *coming soon*
-4. link -> file *coming soon*
+4. link -> file
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
@@ -24,12 +24,12 @@ parser.add_argument("to_file", type=str, help="The file or directory to convert 
 parser.add_argument("extension", type=str, help="The extenstion to convert to")
 
 """
-Essentially, there are three modes to the conversion depending on the input and output details entered:
+Essentially, there are four modes to the conversion depending on the input and output details entered:
 
 1. file -> file
 2. file -> dir *coming soon*
 3. dir -> dir *coming soon*
-4. link -> file *coming soon*
+4. link -> file
 
 **no** dir -> file (obviously, thats impossible)
 """
@@ -46,13 +46,7 @@ conversion_mode = 1
 
 if os.path.isfile(file1):
     conversion_mode = 1
-
-else:
-    raise ce.ModeNotSupported("This mode is not supported yet! Use -h to see all supported conversion modes!")
-"""
-if file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for (useless optimisation alert!)
-    conversion_mode = 4
-
+    """
 elif os.path.isfile(file1):
     conversion_mode = 1
 
@@ -62,6 +56,10 @@ elif os.path.isfile(file1):
 elif os.path.isdir(file1) and os.path.isdir(file2):
     conversion_mode = 3
 """
+elif file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for (useless optimisation alert!)
+    conversion_mode = 4
+else:
+    raise ce.ModeNotSupported("This mode is not supported yet! Use -h to see all supported conversion modes!")
 
 supported_ext = Image.registered_extensions()
 
@@ -93,7 +91,6 @@ def convert_to(file1: str, file2: str, ext: str) -> None:
         file2 = f"{file2}{ext}"
     img.save(file2, ext[1:])
 
-
 if conversion_mode == 1: # file -> file
     convert_to(file1, file2, file_ext)
 
@@ -104,4 +101,13 @@ elif conversion_mode == 3: # dir -> dir
     pass
 
 elif conversion_mode == 4: # link -> file
-    pass
+    res = requests.get(file1)
+    with open(".temp_web_img", "wb") as f:
+        f.write(res.content)
+
+    convert_to(".temp_web_img", file2, file_ext)
+    
+    open(".temp_web_img", "wb").close()
+
+print("\nImage saved as {}!".format(os.path.abspath(file2)))
+print("Done!")

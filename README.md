@@ -1,3 +1,4 @@
+![AICC Logo](https://github.com/sid-the-loser/AICC/blob/main/src/assets/icon.png)
 # AICC
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
@@ -14,12 +15,12 @@ Once you've done that, you can run it through the command line itself.
 ### Current Features
 Conversions from:
 - file to file
+- link to file
 
 ### Features Coming Soon
 Conversions from:
 - file to directory
 - directory to directory
-- link to file
 
 ## How do I build this script on my own?
 
