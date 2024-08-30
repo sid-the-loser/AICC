@@ -32,6 +32,17 @@ This conversion mode converts a file from the internet to a different file exten
 
 This conversion mode converts files from a whole directory into another directory with a different file extension (collectively change the file extensions of image files to another)
 
+## How do I run this in Python?
+
+1. Clone/Download the git repo
+2. Run the `main.py` file using Python3 with all the arguments in place.
+
+Thats it! 
+
+Heres a list of all the necessary modules to run this project:
+- `pip install pillow`
+- `pip install requests`
+
 ## How do I build this script on my own?
 
  Use [pyinstaller](https://pypi.org/project/pyinstaller/)! I've provided a reference to building the script [here](https://github.com/sid-the-loser/AICC/blob/main/build.sh) for **linux** and [here](https://github.com/sid-the-loser/AICC/blob/main/build.bat) for **windows**.
