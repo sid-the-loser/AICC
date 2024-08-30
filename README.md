@@ -19,15 +19,15 @@ Conversions from:
 - `directory` to `directory`
 
 ### Feature Details
-#### `file` to `file` (devs-only note: `conversion_mode = 1`)
+- #### `file` to `file` (devs-only note: `conversion_mode = 1`)
 `aicc <path-to-file that needs conversion> <path-to-file that the converted file should be saved to> <file extension to convert to>`
 
 This conversion mode converts a singular file to a different file extension 
-#### `link` to `file` (devs-only note: `conversion_mode = 4`)
+- #### `link` to `file` (devs-only note: `conversion_mode = 4`)
 `aicc <link to file (must start with "http://" or "https://") that needs conversion> <path-to-file that the converted file should be saved to> <file extension to convert to>`
 
 This conversion mode converts a file from the internet to a different file extension
-#### `dir` to `dir` (devs-only note: `conversion_mode = 3`)
+- #### `dir` to `dir` (devs-only note: `conversion_mode = 3`)
 `aicc <path-to-folder that needs conversion> <path-to-folder that the converted file should be saved to (could be a non-existent folder)> <file extension to convert to>`
 
 This conversion mode converts files from a whole directory into another directory with a different file extension (collectively change the file extensions of image files to another)
