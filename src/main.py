@@ -3,16 +3,13 @@ from PIL import Image
 import os
 import custom_errors as ce
 import requests
-import io
 
 help_text = \
 """
 All supported conversion modes:
-
-1. file -> file
-2. file -> dir *coming soon*
-3. dir -> dir *coming soon*
-4. link -> file
+file -> file,
+link -> file,
+dir -> dir.
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
@@ -24,14 +21,14 @@ parser.add_argument("to_file", type=str, help="The file or directory to convert 
 parser.add_argument("extension", type=str, help="The extenstion to convert to")
 
 """
-Essentially, there are four modes to the conversion depending on the input and output details entered:
+Essentially, there are three modes to the conversion depending on the input and output details entered:
 
 1. file -> file
-2. file -> dir *coming soon*
-3. dir -> dir *coming soon*
+3. dir -> dir 
 4. link -> file
 
 **no** dir -> file (obviously, thats impossible)
+**no** file -> dir (sounds stupid to convert a singular file to a plethura of file extensions, but may add this later if I feel like it)
 """
 
 args = parser.parse_args()
@@ -46,24 +43,22 @@ conversion_mode = 1
 
 if os.path.isfile(file1):
     conversion_mode = 1
-    """
-elif os.path.isfile(file1):
-    conversion_mode = 1
 
-    if os.path.isdir(file2):
-        conversion_mode = 2
+elif os.path.isdir(file1):
+    if (not os.path.exists(file2)) or (not os.path.isdir(file2)):
+        os.mkdir(file2)
 
-elif os.path.isdir(file1) and os.path.isdir(file2):
     conversion_mode = 3
-"""
-elif file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for (useless optimisation alert!)
+
+elif file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for links
     conversion_mode = 4
+
 else:
     raise ce.ModeNotSupported("This mode is not supported yet! Use -h to see all supported conversion modes!")
 
 supported_ext = Image.registered_extensions()
 
-if (file_ext if file_ext.startswith(".") else ".{file_ext}").lower() not in supported_ext:
+if file_ext.lower() not in supported_ext:
     temp = f"{file_ext} not supported! Only supported extensions are: "
 
     for key in supported_ext:
@@ -72,7 +67,7 @@ if (file_ext if file_ext.startswith(".") else ".{file_ext}").lower() not in supp
     raise ce.UnsupportedConversion(temp)
 
 
-def split_path_to_list(path: str) -> list:
+def split_path_to_list(path: str) -> list[str]:
     list_path = path.split("\\") if path.count("\\") > 0 else path.split("/")
     
     return list_path
@@ -81,9 +76,21 @@ def merge_list_to_path(list_path: list) -> str:
     path = ""
 
     for name in list_path:
-        path += name + "\\"
+        if name != "":
+            path += name + "\\"
 
     return path
+
+def get_filename_no_ext_path(filedir):
+    filedir_list = split_path_to_list(filedir)
+    filename = filedir_list[-1]
+    listed_filename = filename.split(".")
+    true_fname = ""
+    
+    for i in range(len(listed_filename)-1):
+        true_fname += "."+listed_filename[i]
+    
+    return true_fname[1:]
 
 def convert_to(file1: str, file2: str, ext: str) -> None:
     img = Image.open(file1)
@@ -94,11 +101,11 @@ def convert_to(file1: str, file2: str, ext: str) -> None:
 if conversion_mode == 1: # file -> file
     convert_to(file1, file2, file_ext)
 
-elif conversion_mode == 2: # file -> dir
-    pass
-
 elif conversion_mode == 3: # dir -> dir
-    pass
+    for filename in os.listdir(file1):
+        filename = os.path.join(file1, filename)
+        if os.path.isfile(filename):
+            convert_to(filename, file2+get_filename_no_ext_path(filename), file_ext)
 
 elif conversion_mode == 4: # link -> file
     res = requests.get(file1)
@@ -109,5 +116,5 @@ elif conversion_mode == 4: # link -> file
     
     open(".temp_web_img", "wb").close()
 
-print("\nImage saved as {}!".format(os.path.abspath(file2)))
+print("\nImage saved as {}".format(os.path.abspath(file2)))
 print("Done!")
