@@ -4,6 +4,8 @@ import os
 import custom_errors as ce
 import requests
 
+aicc_version = "r1.0.0"
+
 help_text = \
 """
 All supported conversion modes:
@@ -13,7 +15,7 @@ dir -> dir.
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
-                              description="All Image Conversion Command (AICC) is for converting any image format to any other image format.",
+                              description=f"All Image Conversion Command (AICC) is for converting any image format to any other image format. Version: {aicc_version}",
                               epilog=help_text+"Note: This command makes use of pillow module in Python.")
 
 parser.add_argument("from_file", type=str, help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
