@@ -3,6 +3,9 @@
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
 
+>> **Note**
+The latest release (`r1.0.0`) does not contain patches for `jpg` support (`jpeg` still works, but it won't recognise `jpg` as a `jpeg` alternative file extension)
+
 ## How do I use this?
 
 Add the program to your computers user `PATH` so you can use it from any directory.
