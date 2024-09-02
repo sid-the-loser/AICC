@@ -4,7 +4,7 @@ import os
 import custom_errors as ce
 import requests
 
-aicc_version = "r1.0.0"
+aicc_version = "r1.0.1"
 
 help_text = \
 """
