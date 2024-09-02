@@ -39,7 +39,13 @@ file1 = args.from_file
 file2 = args.to_file
 file_ext = args.extension
 
+jpg_flag = False
+
 file_ext = f".{file_ext}" if not file_ext.startswith(".") else file_ext
+
+if file_ext.lower() == ".jpg":
+    file_ext = ".jpeg"
+    jpg_flag = True
 
 conversion_mode = 1
 
@@ -95,10 +101,18 @@ def get_filename_no_ext_path(filedir):
     return true_fname[1:]
 
 def convert_to(file1: str, file2: str, ext: str) -> None:
+    global jpg_flag
     img = Image.open(file1)
-    if not file2.lower().endswith(ext.lower()):
+
+    if not jpg_flag: # useless optimisation but idc
+        pass
+    else:
+        ext = ".jpg"
+
+    if (not file2.lower().endswith(ext.lower())):
         file2 = f"{file2}{ext}"
-    img.save(file2, ext[1:])
+    
+    img.save(file2, ext[1:] if not jpg_flag else "jpeg")
 
 if conversion_mode == 1: # file -> file
     convert_to(file1, file2, file_ext)
