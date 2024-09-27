@@ -3,13 +3,10 @@
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
 
->> **Note**
-The latest release (`r1.0.0`) does not contain patches for `jpg` support (`jpeg` still works, but it won't recognise `jpg` as a `jpeg` alternative file extension)
-
 ## How do I use this?
 
-Add the program to your computers user `PATH` so you can use it from any directory.
-Once you've done that, you can run it through the command line itself.
+Add the program to your computer's user `PATH` so you can use it from any directory.
+Once you've done that, you can run it through the command line.
 
 `aicc <path-to-file/folder that needs conversion> <path-to-file/folder that the converted file should be saved to> <file extension to convert to>`
 
@@ -25,15 +22,15 @@ Conversions from:
 - #### `file` to `file` (devs-only note: `conversion_mode = 1`)
 `aicc <path-to-file that needs conversion> <path-to-file that the converted file should be saved to> <file extension to convert to>`
 
-This conversion mode converts a singular file to a different file extension 
+This conversion mode converts a singular file to a different file extension.
 - #### `link` to `file` (devs-only note: `conversion_mode = 4`)
 `aicc <link to file (must start with "http://" or "https://") that needs conversion> <path-to-file that the converted file should be saved to> <file extension to convert to>`
 
-This conversion mode converts a file from the internet to a different file extension
+This conversion mode converts a file from the internet to a different file extension.
 - #### `dir` to `dir` (devs-only note: `conversion_mode = 3`)
 `aicc <path-to-folder that needs conversion> <path-to-folder that the converted file should be saved to (could be a non-existent folder)> <file extension to convert to>`
 
-This conversion mode converts files from a whole directory into another directory with a different file extension (collectively change the file extensions of image files to another)
+This conversion mode converts files from a whole directory into another directory with a different file extension (collectively changing the file extensions of image files to another)
 
 ## How do I run this in Python?
 
@@ -42,7 +39,7 @@ This conversion mode converts files from a whole directory into another director
 
 Thats it! 
 
-Heres a list of all the necessary modules to run this project:
+Here is the list of all the necessary modules to run this project:
 - `pip install pillow`
 - `pip install requests`
 
