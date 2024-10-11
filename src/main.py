@@ -3,8 +3,9 @@ from PIL import Image
 import os
 import custom_errors as ce
 import requests
+import json
 
-aicc_version = "r1.0.2"
+aicc_version = "r1.0.3"
 
 help_text = \
 """
@@ -15,12 +16,15 @@ dir -> dir.
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
-                              description=f"All Image Conversion Command (AICC) is for converting any image format to any other image format. Version: {aicc_version}",
+                              description=f"All Image Conversion Command (AICC) is for converting any image format to \
+                              any other image format. Version: {aicc_version}",
                               epilog=help_text+"Note: This command makes use of pillow module in Python.")
 
-parser.add_argument("from_file", type=str, help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
+parser.add_argument("from_file", type=str,
+                    help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
 parser.add_argument("to_file", type=str, help="The file or directory to convert to")
-parser.add_argument("extension", type=str, help="The extenstion to convert to")
+parser.add_argument("extension", type=str, help="The extension to convert to")
+parser.add_argument("-v", "--version", action="version", version=f"AICC - {aicc_version}")
 
 """
 Essentially, there are three modes to the conversion depending on the input and output details entered:
@@ -29,8 +33,9 @@ Essentially, there are three modes to the conversion depending on the input and 
 3. dir -> dir 
 4. link -> file
 
-**no** dir -> file (obviously, thats impossible)
-**no** file -> dir (sounds stupid to convert a singular file to a plethura of file extensions, but may add this later if I feel like it)
+**no** dir -> file (obviously, that's impossible)
+**no** file -> dir (sounds stupid to convert a singular file to a plethora of file extensions, but may add this later if
+I feel like it)
 """
 
 args = parser.parse_args()
@@ -52,7 +57,7 @@ elif os.path.isdir(file1):
 
     conversion_mode = 3
 
-elif file1.startswith("http://") or file1.startswith("https://"): # since its the easiest to check for links
+elif file1.startswith("http://") or file1.startswith("https://"): # since it is the easiest to check for links
     conversion_mode = 4
 
 else:
@@ -120,5 +125,23 @@ elif conversion_mode == 4: # link -> file
     
     open(".temp_web_img", "wb").close()
 
-print("\nImage saved as {}".format(os.path.abspath(file2)))
+print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
+
+try:
+    with requests.get("https://github.com/sid-the-loser/latest-version-db/raw/refs/heads/main/latest_versions.json",
+                      timeout=5) as request_data:
+        try:
+            online_version = json.loads(request_data.content)["personal"]["aicc"]
+
+            if online_version != aicc_version:
+                print("""Developer has posted a different version of the software on the online data base:
+    Online version: {}
+    Your version: {}
+Check it out on: https://github.com/sid-the-loser/AICC/releases""".format(online_version, aicc_version))
+
+        except json.JSONDecodeError:
+            pass
+
+except requests.ConnectionError:
+    pass
