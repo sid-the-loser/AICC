@@ -3,6 +3,7 @@ src/test/
 build/
 dist/
 src/__pycache__/
+.idea/
 
 # file exts to ignore
 *.spec

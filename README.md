@@ -3,6 +3,9 @@
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
 
+> **Note:**
+> The latest version of this program is `r1.0.3` but it hasn't been released yet. So, if you are compiling the program yourself, you will be compiling the code in `r1.0.3` instead of `r1.0.2`
+
 ## How do I use this?
 
 Add the program to your computer's user `PATH` so you can use it from any directory.
