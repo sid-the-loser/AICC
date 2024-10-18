@@ -24,6 +24,7 @@ parser.add_argument("from_file", type=str,
                     help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
 parser.add_argument("to_file", type=str, help="The file or directory to convert to")
 parser.add_argument("extension", type=str, help="The extension to convert to")
+parser.add_argument("-n", "--no", action="store_true", help="Stops the program from doing online version checking")
 parser.add_argument("-v", "--version", action="version", version=f"All Image Convertion Command (AICC) - {aicc_version}")
 
 """
@@ -45,6 +46,8 @@ file2 = args.to_file
 file_ext = args.extension
 
 file_ext = f".{file_ext}" if not file_ext.startswith(".") else file_ext
+
+dont_check_version = args.no
 
 conversion_mode = 1
 
@@ -128,10 +131,10 @@ elif conversion_mode == 4: # link -> file
 print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
 
-try:
-    with requests.get("https://raw.githubusercontent.com/sid-the-loser/latest-version-db/main/personal_versions.json",
-                      timeout=5) as request_data:
-        try:
+if not dont_check_version:
+    try:
+        with requests.get("https://raw.githubusercontent.com/sid-the-loser/latest-version-db/main/personal_versions.json",
+                        timeout=5) as request_data:
             online_version = json.loads(request_data.content)["personal"]["aicc"]
 
             if online_version != aicc_version:
@@ -140,8 +143,5 @@ try:
     Your version: {}
 Check it out on: https://github.com/sid-the-loser/AICC/releases""".format(online_version, aicc_version))
 
-        except json.JSONDecodeError:
-            pass
-
-except requests.ConnectionError:
-    pass
+    except:
+        pass
