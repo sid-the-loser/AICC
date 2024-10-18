@@ -129,7 +129,7 @@ print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
 
 try:
-    with requests.get("https://github.com/sid-the-loser/latest-version-db/raw/refs/heads/main/latest_versions.json",
+    with requests.get("https://raw.githubusercontent.com/sid-the-loser/latest-version-db/main/personal_versions.json",
                       timeout=5) as request_data:
         try:
             online_version = json.loads(request_data.content)["personal"]["aicc"]
