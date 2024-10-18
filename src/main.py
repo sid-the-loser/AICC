@@ -24,7 +24,7 @@ parser.add_argument("from_file", type=str,
                     help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
 parser.add_argument("to_file", type=str, help="The file or directory to convert to")
 parser.add_argument("extension", type=str, help="The extension to convert to")
-parser.add_argument("-v", "--version", action="version", version=f"AICC - {aicc_version}")
+parser.add_argument("-v", "--version", action="version", version=f"All Image Convertion Command (AICC) - {aicc_version}")
 
 """
 Essentially, there are three modes to the conversion depending on the input and output details entered:
