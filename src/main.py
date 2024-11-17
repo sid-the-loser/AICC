@@ -24,7 +24,7 @@ parser.add_argument("from_file", type=str,
                     help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
 parser.add_argument("to_file", type=str, help="The file or directory to convert to")
 parser.add_argument("extension", type=str, help="The extension to convert to")
-parser.add_argument("-n", "--no", action="store_true", help="Stops the program from doing online version checking")
+parser.add_argument("-n", "--no", action="store_true", help="Stops the program from doing online version checking after image convertion")
 parser.add_argument("-v", "--version", action="version", version=f"All Image Convertion Command (AICC) - {aicc_version}")
 
 """
@@ -135,13 +135,15 @@ if not dont_check_version:
     try:
         with requests.get("https://raw.githubusercontent.com/sid-the-loser/latest-version-db/main/personal_versions.json",
                         timeout=5) as request_data:
-            online_version = json.loads(request_data.content)["personal"]["aicc"]
+            online_version = json.loads(request_data.content)["aicc"]
 
             if online_version != aicc_version:
                 print("""Developer has posted a different version of the software on the online data base:
     Online version: {}
     Your version: {}
 Check it out on: https://github.com/sid-the-loser/AICC/releases""".format(online_version, aicc_version))
+            else:
+                print("You are currently using the latest recorded version of aicc!")
 
     except:
         pass
