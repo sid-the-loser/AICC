@@ -2,7 +2,7 @@ import argparse, os, requests, ovc
 from PIL import Image
 import custom_errors as ce
 
-aicc_version = "r1.0.3"
+aicc_version = "r1.0.4"
 
 class CustomVersionFlag(argparse.Action):
     def __call__(self, parser, namespace, values, option_string = None):
@@ -13,7 +13,8 @@ class CustomVersionFlag(argparse.Action):
             ["name"], 5)
         
         if online_version == None:
-            pass
+            print("Couldn't check for the latest verison online for some"+
+                  " reason :(")
         else:
             if online_version != aicc_version:
                 print(f"Online version: {online_version}\nYou can download "+
