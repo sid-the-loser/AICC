@@ -1,7 +1,8 @@
 import requests
 import json
 
-def get_online_version_using_json(url: str, lookup_pattern:list[str], timeout:float = None) -> str:
+def get_online_version_using_json(url: str, lookup_pattern:list[str], 
+                                  timeout:float = None) -> str:
     online_version = None
 
     try:
