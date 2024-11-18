@@ -2,7 +2,27 @@ import argparse, os, requests, ovc
 from PIL import Image
 import custom_errors as ce
 
-aicc_version = "r1.0.4"
+aicc_version = "r1.0.3"
+
+class CustomVersionFlag(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string = None):
+        print(f"Your version: {aicc_version}")
+
+        online_version = ovc.get_online_version_using_json(
+            "https://api.github.com/repos/sid-the-loser/AICC/releases/latest", 
+            ["name"], 5)
+        
+        if online_version == None:
+            pass
+        else:
+            if online_version != aicc_version:
+                print(f"Online version: {online_version}\nYou can download "+
+                      "the latest version of AICC from "+
+                      "https://github.com/sid-the-loser/AICC/releases")
+            else:
+                print("You are currently using the latest version of AICC.")
+
+        parser.exit()
 
 help_text = \
 """
@@ -13,11 +33,13 @@ dir -> dir.
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
-                              description=f"All Image Conversion Command"+
+                              description="All Image Conversion Command"+
                               " (AICC) is for converting any image format to "+
-                              "any other image format. Version: {aicc_version}",
-                              epilog=help_text+"Note: This command makes use"+
-                              " of pillow module in Python.")
+                              f"any other image format. Version: {aicc_version}"
+                              , epilog=help_text+"Note: This command makes use"+
+                              " of pillow module for Python. If you find any "+
+                              "bugs in this program, please report it to: "+
+                              "https://github.com/sid-the-loser/AICC/issues")
 
 parser.add_argument("from_file", type=str,
                     help="The file or directory or link(must start with"+
@@ -25,11 +47,9 @@ parser.add_argument("from_file", type=str,
 parser.add_argument("to_file", type=str, help="The file or directory to"+
                     " convert to")
 parser.add_argument("extension", type=str, help="The extension to convert to")
-parser.add_argument("-n", "--no", action="store_true", help="Stops the program"+
-                    " from doing online version checking after image convertion"
-                    )
-parser.add_argument("-v", "--version", action="version", version="All Image"+
-                    f" Convertion Command (AICC) - {aicc_version}")
+parser.add_argument("-v", "--version", action=CustomVersionFlag, nargs=0, help=
+                    "Checks the verison of the software and compares it with"+
+                    " the version available online.")
 
 """
 Essentially, there are three modes to the conversion depending on the input and
@@ -51,8 +71,6 @@ file2 = args.to_file
 file_ext = args.extension
 
 file_ext = f".{file_ext}" if not file_ext.startswith(".") else file_ext
-
-dont_check_version = args.no
 
 conversion_mode = 1
 
@@ -139,29 +157,3 @@ elif conversion_mode == 4: # link -> file
 
 print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
-
-if not dont_check_version: # checking for the latest registered online verison
-    try:
-        online_version = ovc.get_online_version_using_json(
-            "https://api.github.com/repos/sid-the-loser/AICC/releases/latest", 
-            ["name"], 5)
-
-        if online_version is not None:
-            if online_version != aicc_version:
-                print(("Developer has posted a different version of the"+
-                      " software on the online data base:\n\tOnline version:"+
-                      " {}\n\tYour version: {}\nCheck it out on: "+
-                      "https://github.com/sid-the-loser/AICC/releases").format(
-                          online_version, aicc_version))
-     
-            else:
-                print("You are currently using the latest recorded version"+
-                      " of aicc!")
-     
-        else:
-            print("There was an error while checking for a version online :( "+
-                  "Its a good idea to check if the developer has a new "+
-                  "up on: https://github.com/sid-the-loser/AICC/releases")
-    
-    except:
-        pass
