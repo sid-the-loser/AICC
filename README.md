@@ -42,7 +42,7 @@ This conversion mode converts a file from the internet to a different file exten
 
 This conversion mode converts files from a whole directory into another directory with a different file extension (collectively changing the file extensions of image files to another)
 
-## Why are all of the `conversion_modes` given random numbers?
+## Why are all of the `conversion_mode`s given random numbers?
 
 ![funny meme](https://i.kym-cdn.com/entries/icons/original/000/031/622/cover1.jpg)
 
