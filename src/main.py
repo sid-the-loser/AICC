@@ -1,11 +1,8 @@
-import argparse
+import argparse, os, requests, ovc
 from PIL import Image
-import os
 import custom_errors as ce
-import requests
-import json
 
-aicc_version = "r1.0.3"
+aicc_version = "r1.0.4"
 
 help_text = \
 """
@@ -16,27 +13,35 @@ dir -> dir.
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
-                              description=f"All Image Conversion Command (AICC) is for converting any image format to \
-                              any other image format. Version: {aicc_version}",
-                              epilog=help_text+"Note: This command makes use of pillow module in Python.")
+                              description=f"All Image Conversion Command"+
+                              " (AICC) is for converting any image format to "+
+                              "any other image format. Version: {aicc_version}",
+                              epilog=help_text+"Note: This command makes use"+
+                              " of pillow module in Python.")
 
 parser.add_argument("from_file", type=str,
-                    help="The file or directory or link(must start with \"http://\" or \"https://\") to convert from")
-parser.add_argument("to_file", type=str, help="The file or directory to convert to")
+                    help="The file or directory or link(must start with"+
+                    " \"http://\" or \"https://\") to convert from")
+parser.add_argument("to_file", type=str, help="The file or directory to"+
+                    " convert to")
 parser.add_argument("extension", type=str, help="The extension to convert to")
-parser.add_argument("-n", "--no", action="store_true", help="Stops the program from doing online version checking after image convertion")
-parser.add_argument("-v", "--version", action="version", version=f"All Image Convertion Command (AICC) - {aicc_version}")
+parser.add_argument("-n", "--no", action="store_true", help="Stops the program"+
+                    " from doing online version checking after image convertion"
+                    )
+parser.add_argument("-v", "--version", action="version", version="All Image"+
+                    f" Convertion Command (AICC) - {aicc_version}")
 
 """
-Essentially, there are three modes to the conversion depending on the input and output details entered:
+Essentially, there are three modes to the conversion depending on the input and
+output details entered:
 
 1. file -> file
 3. dir -> dir 
 4. link -> file
 
 **no** dir -> file (obviously, that's impossible)
-**no** file -> dir (sounds stupid to convert a singular file to a plethora of file extensions, but may add this later if
-I feel like it)
+**no** file -> dir (sounds stupid to convert a singular file to a plethora of 
+file extensions, but may add this later if I feel like it)
 """
 
 args = parser.parse_args()
@@ -60,11 +65,14 @@ elif os.path.isdir(file1):
 
     conversion_mode = 3
 
-elif file1.startswith("http://") or file1.startswith("https://"): # since it is the easiest to check for links
+elif file1.startswith("http://") or file1.startswith("https://"): 
+    # since this is the easiest to check for links
     conversion_mode = 4
 
 else:
-    raise ce.ModeNotSupported("This mode is not supported yet! Use -h to see all supported conversion modes!")
+    raise ce.ModeNotSupported(
+        "This mode is not supported yet! Use -h to see all supported"+
+        " conversion modes!")
 
 supported_ext = Image.registered_extensions()
 
@@ -117,7 +125,8 @@ elif conversion_mode == 3: # dir -> dir
     for filename in os.listdir(file1):
         filename = os.path.join(file1, filename)
         if os.path.isfile(filename):
-            convert_to(filename, file2+get_filename_no_ext_path(filename), file_ext)
+            convert_to(filename, file2+get_filename_no_ext_path(filename), 
+                       file_ext)
 
 elif conversion_mode == 4: # link -> file
     res = requests.get(file1)
@@ -131,19 +140,28 @@ elif conversion_mode == 4: # link -> file
 print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
 
-if not dont_check_version:
+if not dont_check_version: # checking for the latest registered online verison
     try:
-        with requests.get("https://raw.githubusercontent.com/sid-the-loser/latest-version-db/main/personal_versions.json",
-                        timeout=5) as request_data:
-            online_version = json.loads(request_data.content)["aicc"]
+        online_version = ovc.get_online_version_using_json(
+            "https://api.github.com/repos/sid-the-loser/AICC/releases/latest", 
+            ["name"], 5)
 
+        if online_version is not None:
             if online_version != aicc_version:
-                print("""Developer has posted a different version of the software on the online data base:
-    Online version: {}
-    Your version: {}
-Check it out on: https://github.com/sid-the-loser/AICC/releases""".format(online_version, aicc_version))
+                print(("Developer has posted a different version of the"+
+                      " software on the online data base:\n\tOnline version:"+
+                      " {}\n\tYour version: {}\nCheck it out on: "+
+                      "https://github.com/sid-the-loser/AICC/releases").format(
+                          online_version, aicc_version))
+     
             else:
-                print("You are currently using the latest recorded version of aicc!")
-
+                print("You are currently using the latest recorded version"+
+                      " of aicc!")
+     
+        else:
+            print("There was an error while checking for a version online :( "+
+                  "Its a good idea to check if the developer has a new "+
+                  "up on: https://github.com/sid-the-loser/AICC/releases")
+    
     except:
         pass
