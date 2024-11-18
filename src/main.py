@@ -52,18 +52,18 @@ parser.add_argument("-v", "--version", action=CustomVersionFlag, nargs=0, help=
                     "Checks the verison of the software and compares it with"+
                     " the version available online.")
 
-"""
-Essentially, there are three modes to the conversion depending on the input and
-output details entered:
 
-1. file -> file
-3. dir -> dir 
-4. link -> file
+# Essentially, there are three modes to the conversion depending on the input and
+# output details entered:
+#
+# 1. file -> file
+# 3. dir -> dir 
+# 4. link -> file
+#
+# **no** dir -> file (obviously, that's impossible)
+# **no** file -> dir (sounds stupid to convert a singular file to a plethora of 
+# file extensions, but may add this later if I feel like it)
 
-**no** dir -> file (obviously, that's impossible)
-**no** file -> dir (sounds stupid to convert a singular file to a plethora of 
-file extensions, but may add this later if I feel like it)
-"""
 
 args = parser.parse_args()
 
