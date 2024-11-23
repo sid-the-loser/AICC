@@ -153,8 +153,11 @@ elif conversion_mode == 4: # link -> file
         f.write(res.content)
 
     convert_to(".temp_web_img", file2, file_ext)
-    
+
     open(".temp_web_img", "wb").close()
+
+    # os.remove(".temp_web_img") # delete feature which I'm scared to add, I 
+    #                              may release it on r1.0.5
 
 print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
