@@ -3,7 +3,7 @@
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
 
->Spoiler alert! It can't convert all image formats, sorry about the misleading project name, but I'll try adding more support to the project when I get the time for it. (*I ain't paid to do this and neither am I being commisioned or sponsored to work on this! Feel free to contribute and add more file support to the project!*)
+>Spoiler alert! It can't convert all image formats, sorry about the misleading project name, but I'll try adding more support to the project when I get the time for it. (*I ain't paid to do this and neither am I being commisioned or sponsored to work on this!*) Feel free to contribute and add more image format support to the project! I don't bite :smile:
 
 ## How do I use this?
 
