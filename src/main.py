@@ -1,6 +1,7 @@
 import argparse, os, requests, ovc
 from PIL import Image
 import custom_errors as ce
+# todo: use wand instead of pillow
 
 aicc_version = "r1.0.4"
 
