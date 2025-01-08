@@ -3,9 +3,9 @@
 
 A command line tool to convert an image type to another. **AICC** stands for **All Image Conversion Command**.
 
->Spoiler alert! It can't convert all image formats. I'm sorry about the misleading project name, but I'll try adding more support to the project when I get the time. (*I ain't paid to do this, and neither am I being commissioned or sponsored to work on this!*) Feel free to contribute and add more image format support to the project! I don't bite :smile:
+> Spoiler alert! It can't convert all image formats. I'm sorry about the misleading project name, but I'll try adding more support to the project when I get the time. (*I ain't paid to do this, and neither am I being commissioned or sponsored to work on this!*) Feel free to contribute and add more image format support to the project! I don't bite :smile:
 
-> Note: I might use ImageMagick in the next release of the project.
+> Note: I'm going to try remaking the whole project in [ImageMagick](https://imagemagick.org/). Which means that the whole project will be rewritten.
 
 ## How do I use this?
 
@@ -47,7 +47,7 @@ This conversion mode converts files from a whole directory into another director
 
 ![funny meme](https://i.kym-cdn.com/entries/icons/original/000/031/622/cover1.jpg)
 
->I know, "meme funny!" But to be completely clear, I am planning on making this project more contribution-friendly. Right now, I feel like my code is a mess to read through and that everything works great but is hard to collaborate on. I will be fixing that at a later date. (No promises, but that'll probably happen on the 2.0.0 release of the project.)
+> I know, "meme funny!" But to be completely clear, I am planning on making this project more contribution-friendly. Right now, I feel like my code is a mess to read through and that everything works great but is hard to collaborate on. I will be fixing that at a later date. (No promises, but that'll probably happen on the 2.0.0 release of the project.)
 
 ## How do I run this in Python?
 
