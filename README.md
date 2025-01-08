@@ -5,7 +5,7 @@ A command line tool to convert an image type to another. **AICC** stands for **A
 
 > Spoiler alert! It can't convert all image formats. I'm sorry about the misleading project name, but I'll try adding more support to the project when I get the time. (*I ain't paid to do this, and neither am I being commissioned or sponsored to work on this!*) Feel free to contribute and add more image format support to the project! I don't bite :smile:
 
-> Note: I'm going to try remaking the whole project in [ImageMagick](https://imagemagick.org/). Which means that the whole project will be rewritten.
+> Note: I'm going to try remaking the whole project in [ImageMagick](https://imagemagick.org/). Which means that the whole project will be rewritten. Some features might be removed, and some may be added.
 
 ## How do I use this?
 
