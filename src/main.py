@@ -1,9 +1,9 @@
 import argparse, os, requests, ovc
-from PIL import Image
+from wand.image import Image
+from wand.version import formats
 import custom_errors as ce
-# todo: use wand instead of pillow
 
-aicc_version = "r1.0.4"
+aicc_version = "r1.0.5"
 
 class CustomVersionFlag(argparse.Action):
     def __call__(self, parser, namespace, values, option_string = None):
@@ -29,9 +29,8 @@ class CustomVersionFlag(argparse.Action):
 help_text = \
 """
 All supported conversion modes:
-file -> file,
-link -> file,
-dir -> dir.
+1. file -> file,
+2. link -> file
 """
 
 parser = argparse.ArgumentParser(prog="aicc", 
@@ -39,7 +38,7 @@ parser = argparse.ArgumentParser(prog="aicc",
                               " (AICC) is for converting any image format to "+
                               f"any other image format. Version: {aicc_version}"
                               , epilog=help_text+"Note: This command makes use"+
-                              " of pillow module for Python. If you find any "+
+                              " of wand module for Python. If you find any "+
                               "bugs in this program, please report it to: "+
                               "https://github.com/sid-the-loser/AICC/issues")
 
@@ -48,9 +47,8 @@ parser.add_argument("from_file", type=str,
                     " \"http://\" or \"https://\") to convert from")
 parser.add_argument("to_file", type=str, help="The file or directory to"+
                     " convert to")
-parser.add_argument("extension", type=str, help="The extension to convert to")
 parser.add_argument("-v", "--version", action=CustomVersionFlag, nargs=0, help=
-                    "Checks the verison of the software and compares it with"+
+                    "Checks the version of the software and compares it with"+
                     " the version available online.")
 
 
@@ -58,8 +56,7 @@ parser.add_argument("-v", "--version", action=CustomVersionFlag, nargs=0, help=
 # output details entered:
 #
 # 1. file -> file
-# 3. dir -> dir 
-# 4. link -> file
+# 2. link -> file
 #
 # **no** dir -> file (obviously, that's impossible)
 # **no** file -> dir (sounds stupid to convert a singular file to a plethora of 
@@ -70,95 +67,47 @@ args = parser.parse_args()
 
 file1 = args.from_file
 file2 = args.to_file
-file_ext = args.extension
 
-file_ext = f".{file_ext}" if not file_ext.startswith(".") else file_ext
+file2_dot_split = os.path.abspath(file2).split("\\")[-1].split(".")
+
+if len(file2_dot_split) == 1:
+    raise ce.UnsupportedConversion(f"No file extension provided with {file2}")
+
+elif len(formats(file2_dot_split[-1].upper())) == 0:
+    raise ce.UnsupportedConversion(f".{file2_dot_split[-1]} file extension is not supported by AICC!"+
+                                   " If ImageMagick doesn't support it, AICC doesn't either. Go to"+
+                                   " https://imagemagick.org/script/formats.php#supported")
 
 conversion_mode = 1
 
 if os.path.isfile(file1):
     conversion_mode = 1
 
-elif os.path.isdir(file1):
-    if (not os.path.exists(file2)) or (not os.path.isdir(file2)):
-        os.mkdir(file2)
-
-    conversion_mode = 3
-
 elif file1.startswith("http://") or file1.startswith("https://"): 
     # since this is the easiest to check for links
-    conversion_mode = 4
+    conversion_mode = 2
 
 else:
     raise ce.ModeNotSupported(
         "This mode is not supported yet! Use -h to see all supported"+
         " conversion modes!")
 
-supported_ext = Image.registered_extensions()
-
-if file_ext.lower() not in supported_ext:
-    temp = f"{file_ext} not supported! Only supported extensions are: "
-
-    for key in supported_ext:
-        temp += f"{key} "
-
-    raise ce.UnsupportedConversion(temp)
-
-
-def split_path_to_list(path: str) -> list[str]:
-    list_path = path.split("\\") if path.count("\\") > 0 else path.split("/")
-    
-    return list_path
-
-def merge_list_to_path(list_path: list) -> str:
-    path = ""
-
-    for name in list_path:
-        if name != "":
-            path += name + "\\"
-
-    return path
-
-def get_filename_no_ext_path(filedir):
-    filedir_list = split_path_to_list(filedir)
-    filename = filedir_list[-1]
-    listed_filename = filename.split(".")
-    true_fname = ""
-    
-    for i in range(len(listed_filename)-1):
-        true_fname += "."+listed_filename[i]
-    
-    return true_fname[1:]
-
-def convert_to(file1: str, file2: str, ext: str) -> None:
-    img = Image.open(file1)
-
-    if (not file2.lower().endswith(ext.lower())):
-        file2 = f"{file2}{ext}"
-    
-    img.save(file2, supported_ext[ext])
+def convert_to(file1: str, file2: str) -> None:
+    img = Image(filename=file1)
+    img.save(filename=file2)
 
 if conversion_mode == 1: # file -> file
-    convert_to(file1, file2, file_ext)
+    convert_to(file1, file2)
 
-elif conversion_mode == 3: # dir -> dir
-    for filename in os.listdir(file1):
-        filename = os.path.join(file1, filename)
-        if os.path.isfile(filename):
-            convert_to(filename, file2+get_filename_no_ext_path(filename), 
-                       file_ext)
-
-elif conversion_mode == 4: # link -> file
+elif conversion_mode == 2: # link -> file
     res = requests.get(file1)
     with open(".temp_web_img", "wb") as f:
         f.write(res.content)
 
-    convert_to(".temp_web_img", file2, file_ext)
+    convert_to(".temp_web_img", file2)
 
     open(".temp_web_img", "wb").close()
-
-    # os.remove(".temp_web_img") # delete feature which I'm scared to add, I 
-    #                              may release it on r1.0.5
+    os.remove(".temp_web_img")
 
 print("Image saved as {}".format(os.path.abspath(file2)))
 print("Done!")
