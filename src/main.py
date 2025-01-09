@@ -13,7 +13,7 @@ class CustomVersionFlag(argparse.Action):
             "https://api.github.com/repos/sid-the-loser/AICC/releases/latest", 
             ["name"], 5)
         
-        if online_version == None:
+        if online_version is None:
             print("Couldn't check for the latest verison online for some"+
                   " reason :(")
         else:
