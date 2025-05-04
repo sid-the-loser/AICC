@@ -3,7 +3,7 @@ from wand.image import Image
 from wand.version import formats
 import custom_errors as ce
 
-aicc_version = "r1.0.5"
+aicc_version = "r1.0.5w"
 
 class CustomVersionFlag(argparse.Action):
     def __call__(self, parser, namespace, values, option_string = None):
