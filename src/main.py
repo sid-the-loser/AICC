@@ -58,6 +58,8 @@ parser.add_argument("-v", "--version", action=CustomVersionFlag, nargs=0, help=
 # 1. file -> file
 # 2. link -> file
 #
+# **no** dir -> dir (don't feel like anybody's gonna use this too much, but might
+# consider re-adding this later)
 # **no** dir -> file (obviously, that's impossible)
 # **no** file -> dir (sounds stupid to convert a singular file to a plethora of 
 # file extensions, but may add this later if I feel like it)

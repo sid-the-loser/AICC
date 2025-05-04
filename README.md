@@ -5,7 +5,7 @@ A command line tool to convert an image type to another. **AICC** stands for **A
 
 > Spoiler alert! It can't convert all image formats. I'm sorry about the misleading project name, but I'll try adding more support to the project when I get the time. (*I ain't paid to do this, and neither am I being commissioned or sponsored to work on this!*) Feel free to contribute and add more image format support to the project! I don't bite :smile:
 
-> Note: I'm going to try remaking the whole project in [ImageMagick](https://imagemagick.org/). Which means that the whole project will be rewritten. Some features might be removed, and some may be added.
+> Note: I've remade the whole project in [ImageMagick](https://imagemagick.org/). Which means that the whole project is rewritten. Some features might've been removed, and some may have be added.
 
 ## How do I use this?
 
@@ -21,7 +21,7 @@ Once you've done that, you can run it through the command line.
 Conversions from:
 - `file`      to `file`
 - `link`      to `file`
-- `directory` to `directory`
+- `directory` to `directory` *removed in r1.0.5w!*
 
 ### Feature Details
 
@@ -31,13 +31,13 @@ Conversions from:
 
 This conversion mode converts a singular file to a different file extension.
 
-- #### `link` to `file` (devs-only note: `conversion_mode = 4`)
+- #### `link` to `file` (devs-only note: `conversion_mode = 4` | `conversion_mode = 2` <- from r1.0.5w+)
 
 `aicc <link to file (must start with "http://" or "https://") that needs conversion> <path-to-file that the converted file should be saved to> <file extension to convert to>`
 
 This conversion mode converts a file from the internet to a different file extension.
 
-- #### `dir` to `dir` (devs-only note: `conversion_mode = 3`)
+- #### `dir` to `dir` (devs-only note: `conversion_mode = 3`) *removed in r1.0.5w!*
 
 `aicc <path-to-folder that needs conversion> <path-to-folder that the converted file should be saved to (could be a non-existent folder)> <file extension to convert to>`
 
