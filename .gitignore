@@ -4,6 +4,7 @@ build/
 dist/
 src/__pycache__/
 .idea/
+.venv/
 
 # file exts to ignore
 *.spec
